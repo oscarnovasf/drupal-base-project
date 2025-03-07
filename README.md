@@ -30,14 +30,37 @@
 
 ## Instalación
 
-## Usuarios por defecto:
+* ### Proceso de instalación: [LANDO](https://lando.dev/)
+  * Copiamos el contenido del proyecto en una carpeta de nuestra máquina.
+  * Establecemos los valores correctos en el archivo `.lando.yml` para la
+    conexión con la base de datos y el nombre del proyecto.
+  * Creamos el archivo `.env` a partir de `.env.example` y establecemos los
+    valores a las variables.
+  * Establecemos el nombre del proyecto en nuestro `composer.custom.json`.
+  * Ejecutamos `lando start` para montar los contenedores del proyecto.
 
-Este script genera dos usuarios, el administrador y un usuario "gestor":
+    > [!NOTE]
+    > De forma opcional podemos usar el script [iniciar-proyecto](https://github.com/oscarnovasf/iniciar-proyecto)
+    > para descargar e iniciar un proyecto nuevo.
 
-|Role|Usuario|Contraseña|Correo electrónico|
-|---|---|---|---|
-|admin|admin|password|admin@example.com|
-|manager|manager|password|manager@example.com|
+    > [!IMPORTANT]
+    > Al usar Lando, es recomendable que todos los scripts se ejecuten dentro
+    > del contenedor, salvo que se use `lando drush` o `lando composer`.
+
+    > [!CAUTION]
+    > Este proyecto incluye un script que se ejecuta como hook de Lando al
+    > ejecutar el comando `lando destroy`, se trata de un script propio del
+    > desarrollo de esta plantilla y quizás quieras eliminarlo para prevenir
+    > errores en tu proyecto.
+
+* ### Usuarios por defecto:
+
+  Este script genera dos usuarios, el "administrador" y un usuario "gestor":
+
+  |Role|Usuario|Contraseña|Correo electrónico|
+  |---|---|---|---|
+  |admin|admin|password|admin@example.com|
+  |manager|manager|password|manager@example.com|
 
 
 ---
