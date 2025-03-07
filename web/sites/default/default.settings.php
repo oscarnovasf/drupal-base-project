@@ -61,6 +61,11 @@ use Drupal\Core\Installer\InstallerKernel;
  * implementations with custom ones.
  */
 
+if (file_exists($app_root . '/../.env')) {
+  $dotenv = Dotenv::createImmutable(DRUPAL_ROOT, '..');
+  $dotenv->load();
+}
+
 /**
  * Database settings:
  *
@@ -247,6 +252,19 @@ $databases = [];
  *   ];
  * @endcode
  */
+$databases['default']['default'] = [
+  'database'        => getenv('DRUPAL_DB_DATABASE'),
+  'username'        => getenv('DRUPAL_DB_USER'),
+  'password'        => getenv('DRUPAL_DB_PASSWORD'),
+  'prefix'          => getenv('DRUPAL_DB_PREFIX'),
+  'host'            => getenv('DRUPAL_DB_HOSTNAME'),
+  'port'            => getenv('DRUPAL_DB_PORT'),
+
+  'isolation_level' => 'READ COMMITTED',
+  'driver'          => 'mysql',
+  'namespace'       => 'Drupal\\mysql\\Driver\\Database\\mysql',
+  'autoload'        => 'core/modules/mysql/src/Driver/Database/mysql/',
+];
 
 /**
  * Location of the site configuration files.
@@ -259,7 +277,7 @@ $databases = [];
  * directory in the public files path. The setting below allows you to set
  * its location.
  */
-# $settings['config_sync_directory'] = '/directory/outside/webroot';
+$settings['config_sync_directory'] = $app_root . '/../config/sync/global';
 
 /**
  * Settings:
@@ -289,7 +307,7 @@ $databases = [];
  *   $settings['hash_salt'] = file_get_contents('/home/example/salt.txt');
  * @endcode
  */
-$settings['hash_salt'] = '';
+$settings['hash_salt'] = getenv('DRUPAL_HASH_SALT');
 
 /**
  * Deployment identifier.
@@ -299,7 +317,7 @@ $settings['hash_salt'] = '';
  * custom code that changes the container, changing this identifier will also
  * allow the container to be invalidated as soon as code is deployed.
  */
-# $settings['deployment_identifier'] = \Drupal::VERSION;
+$settings['deployment_identifier'] = \Drupal::VERSION;
 
 /**
  * Access control for update.php script.
@@ -349,6 +367,15 @@ $settings['update_free_access'] = FALSE;
 # $settings['http_client_config']['proxy']['http'] = 'http://proxy_user:proxy_pass@example.com:8080';
 # $settings['http_client_config']['proxy']['https'] = 'http://proxy_user:proxy_pass@example.com:8080';
 # $settings['http_client_config']['proxy']['no'] = ['127.0.0.1', 'localhost'];
+
+/**
+ * Solves problem on using media module to place a Youtube video.
+ * See: https://menetray.com/en/blog/youtube-problems-drupal-8
+ *
+ * If this problem also happens in production, this line must be moved to
+ * settings.php file.
+ */
+$settings['http_client_config']['force_ip_resolve'] = 'v4';
 
 /**
  * Reverse Proxy Configuration:
@@ -444,6 +471,12 @@ $settings['update_free_access'] = FALSE;
  * getting cached pages from the proxy.
  */
 # $settings['omit_vary_cookie'] = TRUE;
+$settings['cache_prefix'] = getenv('PROJECT_CODE') . '_';
+
+/* APCU */
+$settings['cache']['bins']['bootstrap'] = 'cache.backend.chainedfast';
+$settings['cache']['bins']['discovery'] = 'cache.backend.chainedfast';
+$settings['cache']['bins']['config']    = 'cache.backend.chainedfast';
 
 
 /**
@@ -507,8 +540,8 @@ $settings['update_free_access'] = FALSE;
  *
  * Value should be in PHP Octal Notation, with leading zero.
  */
-# $settings['file_chmod_directory'] = 0775;
-# $settings['file_chmod_file'] = 0664;
+$settings['file_chmod_directory'] = 0775;
+$settings['file_chmod_file'] = 0664;
 
 /**
  * Optimized assets path:
@@ -613,7 +646,7 @@ $settings['update_free_access'] = FALSE;
  * See https://www.drupal.org/documentation/modules/file for more information
  * about securing private files.
  */
-# $settings['file_private_path'] = '';
+$settings['file_private_path'] = $app_root . '/../private_files';
 
 /**
  * Temporary file path:
@@ -626,7 +659,7 @@ $settings['update_free_access'] = FALSE;
  *
  * @see \Drupal\Component\FileSystem\FileSystem::getOsTemporaryDirectory()
  */
-# $settings['file_temp_path'] = '/tmp';
+$settings['file_temp_path'] = $app_root . '../tmp';
 
 /**
  * Session write interval:
@@ -712,11 +745,34 @@ $settings['update_free_access'] = FALSE;
  */
 # $config['system.site']['name'] = 'My Drupal site';
 # $config['user.settings']['anonymous'] = 'Visitor';
+$config['locale.settings']['translation']['path'] = $app_root . '/../config/translations';
+$config['file.settings']['make_unused_managed_files_temporary'] = TRUE;
+$config['system.file']['path']['temporary'] = $app_root . '/../tmp';
+
+/**
+ * Indicador del entorno activo.
+ */
+$environments_colors = [
+  'loc' => '#aa3300',
+  'dev' => '#ffff00',
+  'stg' => '#aa5501',
+  'pro' => '#5C8F2F'
+];
+if (isset($environments_colors[getenv('DRUPAL_ENV')])) {
+  $config['environment_indicator.indicator']['bg_color'] = $environments_colors[getenv('DRUPAL_ENV')];
+  $config['environment_indicator.indicator']['name'] = strtoupper(getenv('DRUPAL_ENV'));
+}
+else {
+  $config['environment_indicator.indicator']['bg_color'] = '';
+  $config['environment_indicator.indicator']['fg_color'] = '';
+  $config['environment_indicator.indicator']['name'] = '';
+  $config['environment_indicator.settings']['favicon'] = '';
+}
 
 /**
  * Load services definition file.
  */
-$settings['container_yamls'][] = $app_root . '/' . $site_path . '/services.yml';
+$settings['container_yamls'][] = DRUPAL_ROOT . '/sites/default/default.services.yml';
 
 /**
  * Override the default service container class.
@@ -765,7 +821,10 @@ $settings['container_yamls'][] = $app_root . '/' . $site_path . '/services.yml';
  *
  * @see https://www.drupal.org/docs/installing-drupal/trusted-host-settings
  */
-# $settings['trusted_host_patterns'] = [];
+$settings['trusted_host_patterns'] = [
+  '^' . getenv('DRUPAL_TRUSTED_HOST') . '$',
+  '^.+\.' . getenv('DRUPAL_TRUSTED_HOST') . '$',
+];
 
 /**
  * The default list of directories that will be ignored by Drupal's file API.
@@ -858,6 +917,53 @@ $settings['migrate_node_migrate_type_classic'] = FALSE;
 # $settings['migrate_file_private_path'] = '';
 
 /**
+ * Redis/ KeyDB.
+ */
+if (
+  !empty(getenv('REDIS_HOST')) &&
+  !empty(getenv('REDIS_PORT')) &&
+  !InstallerKernel::installationAttempted()
+) {
+  $settings['redis.connection']['persistent'] = TRUE;
+  $settings['redis.connection']['interface']  = 'PhpRedis';
+  $settings['redis.connection']['host']       = getenv('REDIS_HOST');
+  $settings['redis.connection']['port']       = getenv('REDIS_PORT');
+  $settings['redis.connection']['base']       = getenv('REDIS_DB') ?: 0;
+  if (getenv('REDIS_PASS')) {
+    $settings['redis.connection']['password'] = getenv('REDIS_PASS');
+  }
+  $settings['redis.settings']['perm_ttl'] = getenv('REDIS_TTL');
+
+  $settings['cache']['default'] = 'cache.backend.redis';
+  $settings['container_yamls'][] = DRUPAL_ROOT . '/sites/default/cache.services.yml';
+}
+
+/**
+ * Conjunto de configuraciones específicas para cada entorno.
+ */
+switch (getenv('DRUPAL_ENV')) {
+  case 'pro':
+  case 'stg':
+    $config['stage_file_proxy.settings']['origin'] = NULL;
+    break;
+
+  case 'loc':
+  case 'dev':
+  default:
+    if (!empty(getenv('DRUPAL_PROD_URL'))) {
+      $config['stage_file_proxy.settings']['origin'] = getenv('DRUPAL_PROD_URL');
+    }
+    /* Con esto nos aseguramos que no se nos escapan las configuraciones de
+     * desarrollo a producción */
+    if (file_exists($app_root . '/' . $site_path . '/settings.develop.php')) {
+      include $app_root . '/' . $site_path . '/settings.develop.php';
+    }
+    break;
+}
+
+$config['config_split.config_split.' . getenv('DRUPAL_ENV')]['status'] = TRUE;
+
+/**
  * Load local development override configuration, if available.
  *
  * Create a settings.local.php file to override variables on secondary (staging,
@@ -871,6 +977,9 @@ $settings['migrate_node_migrate_type_classic'] = FALSE;
  * Keep this code block at the end of this file to take full effect.
  */
 #
-# if (file_exists($app_root . '/' . $site_path . '/settings.local.php')) {
-#   include $app_root . '/' . $site_path . '/settings.local.php';
-# }
+if (file_exists($app_root . '/' . $site_path . '/settings.custom.php')) {
+  include $app_root . '/' . $site_path . '/settings.custom.php';
+}
+if (file_exists($app_root . '/' . $site_path . '/settings.local.php')) {
+  include $app_root . '/' . $site_path . '/settings.local.php';
+}
