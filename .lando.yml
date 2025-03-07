@@ -23,7 +23,7 @@ services:
       - ./.lando/scripts/prepare_lando_root.sh
     run:
       - find ./scripts/shell/ -type f -iname "*.sh" -exec chmod +x {} \;
-      - ./.lando/scripts/install.sh
+      - ./.lando/scripts/install_drupal.sh
     run_as_root:
       - "a2enmod headers"
       - "service apache2 reload"
@@ -107,7 +107,7 @@ proxy:
 
 events:
   pre-destroy:
-    - ./.lando/scripts/return_origen.sh
+    - ./.lando/scripts/destroy_lando.sh
 
 tooling:
 

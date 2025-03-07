@@ -85,6 +85,7 @@ function eliminar_archivos() {
     "/app/web/.eslintrc.json"
     "/app/web/.ht.router.php"
     "/app/web/.htaccess"
+    "/app/web/.gitignore"
     "/app/web/autoload.php"
     "/app/web/index.php"
     "/app/web/README.md"
