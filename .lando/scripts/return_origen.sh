@@ -78,6 +78,8 @@ function eliminar_directorios() {
 function eliminar_archivos() {
   local archivos=(
     "/app/composer.lock"
+    "/app/.git/hooks/commit-msg"
+    "/app/.git/hooks/pre-commit"
     "/app/web/.csslintrc"
     "/app/web/.eslintignore"
     "/app/web/.eslintrc.json"
