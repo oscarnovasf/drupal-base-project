@@ -16,8 +16,11 @@
   <exclude-pattern>*/config/*</exclude-pattern>
   <exclude-pattern>*/docs/*</exclude-pattern>
   <exclude-pattern>*/drush/*</exclude-pattern>
+  <exclude-pattern>*/private_files/*</exclude-pattern>
+  <exclude-pattern>*/recipes/*</exclude-pattern>
   <exclude-pattern>*/scripts/*</exclude-pattern>
   <exclude-pattern>*/testing/*</exclude-pattern>
+  <exclude-pattern>*/tmp/*</exclude-pattern>
 
   <exclude-pattern>*/css/*</exclude-pattern>
   <exclude-pattern>*/scss/*</exclude-pattern>
