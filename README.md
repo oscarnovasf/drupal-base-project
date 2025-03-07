@@ -51,7 +51,7 @@
     > Este proyecto incluye un script que se ejecuta como hook de Lando al
     > ejecutar el comando `lando destroy`, se trata de un script propio del
     > desarrollo de esta plantilla y quizás quieras eliminarlo para prevenir
-    > errores en tu proyecto.
+    > errores en tu proyecto (`./.lando/scripts/destroy_lando.sh`).
 
 * ### Usuarios por defecto:
 
