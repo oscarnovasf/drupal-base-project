@@ -108,6 +108,7 @@
         ]
     },
     "extra": {
+        "composer-exit-on-patch-failure": false,
         "drupal-scaffold": {
             "allowed-packages": ["drupal/core"],
             "locations": {
