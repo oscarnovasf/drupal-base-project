@@ -1,0 +1,27 @@
+parameters:
+  level: 5
+  reportUnmatchedIgnoredErrors: false
+  treatPhpDocTypesAsCertain: false
+  fileExtensions:
+    - php
+    - module
+    - inc
+    - theme
+    - install
+    - profile
+  scanDirectories:
+    - web/modules/contrib
+    - web/themes/contrib
+    - web/core
+  paths:
+    - web/modules/custom
+    - web/themes/custom
+  ignoreErrors:
+    - message: '#.*return type has no value type specified.*#'
+    - message: '#.*has parameter .* with no type specified.*#'
+    - message: '#.*has no return type specified.*#'
+    - message: '#.*has parameter .* with no value type specified.*#'
+    - message: '#^Unsafe usage of new static#'
+    - message: '#^Dynamic call to static method PHPUnit\\\\Framework\\\\Assert#'
+    - message: '#^Variable method call on .*#'
+    - message: '#^Variable property access on .*#'
