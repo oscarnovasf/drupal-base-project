@@ -32,7 +32,6 @@
 
         "drush/drush": "^13.3",
 
-        "mikehaertl/phpwkhtmltopdf": "^2.5",
         "oomphinc/composer-installers-extender": "^2.0",
         "vlucas/phpdotenv": "^5.6",
         "webflo/drupal-finder": "^1.3",
@@ -40,7 +39,9 @@
     },
 
     "require-dev": {
-        "drupal/core-dev": "^11.1"
+        "drupal/core-dev": "^11.1",
+
+        "cyclonedx/cyclonedx-php-composer": "^5.2"
     },
 
     "conflict": {
@@ -74,6 +75,13 @@
         "files": ["load.environment.php"]
     },
     "scripts": {
+        "create-sbom:JSON": [
+            "@composer CycloneDX:make-sbom --omit=dev --validate --spec-version=1.6 --output-reproducible --output-format=JSON --output-file=$PWD/docs/data/sbom.json"
+        ],
+
+        "create-sbom:XML": [
+            "@composer CycloneDX:make-sbom --omit=dev --validate --spec-version=1.6 --output-reproducible --output-format=XML --output-file=$PWD/docs/data/sbom.xml"
+        ],
         "post-scripts": [
             "DrupalProject\\composer\\ScriptHandler::removeGitDirectories",
             "DrupalProject\\composer\\ScriptHandler::removeUnnecessaryFiles",
@@ -91,7 +99,9 @@
             "@post-scripts"
         ],
         "post-update-cmd": [
-            "@post-scripts"
+            "@post-scripts",
+            "@create-sbom:JSON",
+            "@create-sbom:XML"
         ],
         "pre-drupal-scaffold-cmd": [
             "DrupalProject\\composer\\ScriptHandler::preDrupalScaffold"
