@@ -30,6 +30,14 @@
 
 ## Instalación
 
+## Usuarios por defecto:
+
+Este script genera dos usuarios, el administrador y un usuario "gestor":
+|Role|Usuario|Contraseña|Correo electrónico|
+|---|---|---|---|
+|admin|admin|password|admin@example.com|
+|manager|manager|password|manager@example.com|
+
 
 ---
 
