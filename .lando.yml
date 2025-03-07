@@ -1,0 +1,258 @@
+name: [PROYECTO]
+recipe: drupal11
+
+config:
+  webroot: web
+  php: '8.3'
+  composer_version: 2-latest
+  drush: ^13
+  xdebug: debug
+  config:
+    php: ./.lando/php/php.ini
+
+env_file:
+  - ./.lando/env.lndo
+
+services:
+  # Configuración del contenedor principal.
+  appserver:
+    build:
+      - ./.lando/scripts/prepare_lando.sh
+    build_as_root:
+      - find ./.lando/scripts/ -type f -iname "*.sh" -exec chmod +x {} \;
+      - ./.lando/scripts/prepare_lando_root.sh
+    run:
+      - find ./scripts/shell/ -type f -iname "*.sh" -exec chmod +x {} \;
+      - ./.lando/scripts/install.sh
+    run_as_root:
+      - "a2enmod headers"
+      - "service apache2 reload"
+    scanner:
+      maxRedirects: 0
+      timeout: 4000
+      retry: 10
+    overrides:
+      environment:
+        # Soporte para debug con Drush y XDEBUG.
+        PHP_IDE_CONFIG: "serverName=appserver"
+        # PHPUnit.
+        SIMPLETEST_BASE_URL: "https://[PROYECTO].lndo.site"
+        SIMPLETEST_DB: "mysql://[USER]:[PASSWORD]@database/[DATABASE]"
+        # Mailhog.
+        PHP_SENDMAIL_PATH: '/usr/sbin/sendmail -S mailhog:1025'
+        # Behat / Selenium2.
+        MINK_DRIVER_ARGS: '["chrome", null, "http://chromedriver:4444/wd/hub"]'
+        MINK_DRIVER_ARGS_WEBDRIVER: '["chrome", null, "http://chromedriver:4444/wd/hub"]'
+        MINK_DRIVER_CLASS: 'Drupal\FunctionalJavascriptTests\DrupalSelenium2Driver'
+        BEHAT_PARAMS: '{"extensions": {"Behat\\MinkExtension": {"base_url": "http://appserver/"}, "Drupal\\DrupalExtension": {"drush" : {"root": "/app/web"}}}}'
+        # CycloneDX.
+        CDX_CP_TOOLS_VERSION_OVERRIDE: 'in-dev'
+        CDX_CP_TOOLS_EXCLUDE_LIBS: 1
+        CDX_CP_TOOLS_EXCLUDE_COMPOSER: 1
+
+  # Configuración de la base de datos.
+  database:
+    type: mariadb:10.11
+    portforward: 3307
+    creds:
+      user: [USER]
+      database: [DATABASE]
+      password: [PASSWORD]
+
+  # Pruebas Behat.
+  chromedriver:
+    type: compose
+    services:
+      image: robcherry/docker-chromedriver:latest
+      expose:
+        - "4444"
+      environment:
+        CHROMEDRIVER_WHITELISTED_IPS: ""
+        CHROMEDRIVER_URL_BASE: "/wd/hub"
+      security_opt:
+        - seccomp:unconfined
+      command: ["/usr/local/bin/supervisord", "-c", "/etc/supervisord.conf"]
+
+  # Captura de correos.
+  mailhog:
+    type: mailhog
+    portforward: true
+    hogfrom:
+      - appserver
+
+  # Gestión de la base de datos.
+  adminer:
+    type: compose
+    services:
+      image: dehy/adminer
+      command: '/bin/s6-svscan /etc/services.d'
+    portforward: true
+    depends_on:
+      - database
+
+  # Gestión de caché.
+  cache:
+    type: redis
+    portforward: 6380
+    persist: true
+
+proxy:
+  appserver:
+    - [PROYECTO].lndo.site
+    - cdn.[PROYECTO].lndo.site
+  mailhog:
+    - mail.[PROYECTO].lndo.site
+  adminer:
+    - db.[PROYECTO].lndo.site
+
+events:
+  pre-destroy:
+    - ./scripts/shell/initialize.sh
+
+tooling:
+
+  # ############################################################################
+  #  Zona de herramientas para frontend.
+  # ############################################################################
+
+  # lando gulp
+  gulp:
+    service: appserver
+    description: Ejecución del watch de gulp en el custom theme.
+    dir: /app/web/themes/custom/[THEME_MACHINE_NAME]/
+    cmd:
+      - gulp
+
+  # lando npm
+  npm:
+    service: appserver
+    description: Ejecución del gestor de paquetes npm dentro del custom theme.
+    dir: /app/web/themes/custom/[THEME_MACHINE_NAME]/
+    cmd:
+      - npm
+
+  # lando npx
+  npx:
+    service: appserver
+    description: Ejecución del gestor de paquetes npx dentro del custom theme.
+    dir: /app/web/themes/custom/[THEME_MACHINE_NAME]/
+    cmd:
+      - npx
+
+  # lando sass
+  sass:
+    service: appserver
+    description: Ejecución del watch de sass en el custom theme.
+    dir: /app/web/themes/custom/[THEME_MACHINE_NAME]/
+    cmd:
+      - sass -w ./scss:./css --style compressed
+
+  # ############################################################################
+  #  Zona de ajustes sobre Drush.
+  # ############################################################################
+
+  # lando druli
+  druli:
+    service: appserver
+    description: Ejecuta 'drush uli' con la URI del proyecto.
+    cmd:
+      - drush uli --uri=https://[PROYECTO].lndo.site
+
+  # lando cr
+  cr:
+    service: appserver
+    description: Ejecuta 'drush cr' con la URI del proyecto.
+    cmd:
+      - appserver: drush cr
+      - cache: redis-cli flushall
+
+  # lando drush
+  drush:
+    service: appserver
+    description: Ejecuta cualquier comando de Drush.
+    cmd:
+      - drush
+
+  # ############################################################################
+  #  Zona de ajustes sobre Composer.
+  # ############################################################################
+
+  # lando audit
+  audit:
+    service: appserver
+    description: Buscar problemas en dependencias instaladas.
+    cmd:
+      - composer audit --locked
+
+  # lando composer
+  composer:
+    service: appserver
+    description: Ejecutar comandos de composer.
+    cmd:
+      - composer
+
+  # lando outdated
+  outdated:
+    service: appserver
+    description: Comprobar dependencias con versiones nuevas.
+    cmd:
+      - composer outdated --locked --strict
+
+  # lando sbom
+  sbom:
+    service: appserver
+    description: "Generar una SBOM (Lista de Materiales)."
+    cmd:
+      - composer CycloneDX:make-sbom --omit=dev --validate --spec-version=1.6 --output-reproducible --output-file=./docs/data/sbom.xml
+      - composer CycloneDX:make-sbom --omit=dev --validate --spec-version=1.6 --output-reproducible --output-file=./docs/data/sbom.json --output-format=JSON
+
+  # ############################################################################
+  #  Zona de herramientas y análisis.
+  # ############################################################################
+
+  # lando analyse
+  analyse:
+    service: appserver
+    description: Ejecución de análisis de código (GrumPHP).
+    cmd:
+      - /app/vendor/bin/grumphp run
+
+  # lando behat
+  behat:
+    service: appserver
+    description: "Ejecución de pruebas funcionales con Behat."
+    cmd:
+      - /app/vendor/bin/behat
+
+  # lando lineas
+  lineas:
+    service: appserver
+    description: Contar líneas de módulos y temas custom.
+    cmd:
+      - echo && echo "Líneas de Módulos:" && echo && cloc /app/web/modules/custom
+      - echo && echo  "Líneas de Themes:" && echo && cloc /app/web/themes/custom
+      - echo && echo   "Líneas Globales:" && echo && cloc /app/web/modules/custom /app/web/themes/custom
+
+  # lando phpstan
+  phpstan:
+    service: appserver
+    description: Ejecución de análisis estático de código (PHPStan).
+    cmd:
+      - /app/vendor/bin/phpstan analyse
+
+  # lando phpunit
+  phpunit:
+    service: appserver
+    description: Ejecución PHPUnit pasando la suite que queremos ejecutar.
+    cmd: "php -d xdebug.remote_port=9003 /app/vendor/bin/phpunit -c /app/phpunit.xml --testsuite"
+
+  # lando rector
+  rector:
+    service: appserver
+    description: Ejecutar rector.
+    cmd:
+      - ./vendor/bin/rector process --config ./vendor/palantirnet/drupal-rector/rector.php
+
+  # ############################################################################
+  #  Zona de Scripts.
+  # ############################################################################
