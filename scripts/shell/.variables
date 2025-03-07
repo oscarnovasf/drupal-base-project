@@ -111,8 +111,8 @@ MANAGER_PERMISSIONS=("${MANAGER_PERMISSIONS[@]}" "view the administration theme"
 MANAGER_PERMISSIONS=("${MANAGER_PERMISSIONS[@]}" "view user email addresses")
 
 # Permisos iniciales del Manager (módulos contrib).
-MANAGER_PERMISSIONS=("${MANAGER_PERMISSIONS[@]}" "edit config_pages entity")
-MANAGER_PERMISSIONS=("${MANAGER_PERMISSIONS[@]}" "view config_pages entity")
-MANAGER_PERMISSIONS=("${MANAGER_PERMISSIONS[@]}" "delete any webform submission")
-MANAGER_PERMISSIONS=("${MANAGER_PERMISSIONS[@]}" "edit any webform submission")
-MANAGER_PERMISSIONS=("${MANAGER_PERMISSIONS[@]}" "view any webform submission")
+# MANAGER_PERMISSIONS=("${MANAGER_PERMISSIONS[@]}" "edit config_pages entity")
+# MANAGER_PERMISSIONS=("${MANAGER_PERMISSIONS[@]}" "view config_pages entity")
+# MANAGER_PERMISSIONS=("${MANAGER_PERMISSIONS[@]}" "delete any webform submission")
+# MANAGER_PERMISSIONS=("${MANAGER_PERMISSIONS[@]}" "edit any webform submission")
+# MANAGER_PERMISSIONS=("${MANAGER_PERMISSIONS[@]}" "view any webform submission")

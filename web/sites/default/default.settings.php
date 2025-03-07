@@ -659,7 +659,7 @@ $settings['file_private_path'] = $app_root . '/../private_files';
  *
  * @see \Drupal\Component\FileSystem\FileSystem::getOsTemporaryDirectory()
  */
-$settings['file_temp_path'] = $app_root . '../tmp';
+$settings['file_temp_path'] = $app_root . '/../tmp';
 
 /**
  * Session write interval:
@@ -747,7 +747,6 @@ $settings['file_temp_path'] = $app_root . '../tmp';
 # $config['user.settings']['anonymous'] = 'Visitor';
 $config['locale.settings']['translation']['path'] = $app_root . '/../config/translations';
 $config['file.settings']['make_unused_managed_files_temporary'] = TRUE;
-$config['system.file']['path']['temporary'] = $app_root . '/../tmp';
 
 /**
  * Indicador del entorno activo.
