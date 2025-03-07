@@ -74,6 +74,7 @@
             "icanhazstring/composer-unused": true,
             "oomphinc/composer-installers-extender": true,
             "php-http/discovery": true,
+            "phpro/grumphp-shim": true,
             "phpstan/extension-installer": true,
             "tbachert/spi": true,
             "wikimedia/composer-merge-plugin": true,

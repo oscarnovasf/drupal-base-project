@@ -955,8 +955,8 @@ switch (getenv('DRUPAL_ENV')) {
     }
     /* Con esto nos aseguramos que no se nos escapan las configuraciones de
      * desarrollo a producción */
-    if (file_exists($app_root . '/' . $site_path . '/settings.develop.php')) {
-      include $app_root . '/' . $site_path . '/settings.develop.php';
+    if (file_exists(DRUPAL_ROOT . '/sites/default/settings.develop.php')) {
+      include DRUPAL_ROOT . '/sites/default/settings.develop.php';
     }
     break;
 }
