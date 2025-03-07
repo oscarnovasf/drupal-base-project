@@ -37,7 +37,7 @@ services:
         PHP_IDE_CONFIG: "serverName=appserver"
         # PHPUnit.
         SIMPLETEST_BASE_URL: "https://[PROYECTO].lndo.site"
-        SIMPLETEST_DB: "mysql://[USER]:[PASSWORD]@database/[DATABASE]"
+        SIMPLETEST_DB: "mysql://udrupal:drupal_password@database/drupal"
         # Mailhog.
         PHP_SENDMAIL_PATH: '/usr/sbin/sendmail -S mailhog:1025'
         # Behat / Selenium2.
@@ -55,9 +55,9 @@ services:
     type: mariadb:10.11
     portforward: 3307
     creds:
-      user: [USER]
-      database: [DATABASE]
-      password: [PASSWORD]
+      user: udrupal
+      database: drupal
+      password: drupal_password
 
   # Pruebas Behat.
   chromedriver:
@@ -107,7 +107,7 @@ proxy:
 
 events:
   pre-destroy:
-    - ./scripts/shell/initialize.sh
+    - ./.lando/scripts/return_origen.sh
 
 tooling:
 
