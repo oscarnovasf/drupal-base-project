@@ -1,0 +1,16 @@
+langcode: es
+status: true
+dependencies: {  }
+id: pro
+label: 'Producción'
+description: 'Configuración para entorno de Producción'
+weight: 3
+stackable: false
+no_patching: false
+storage: folder
+folder: ../config/sync/pro
+module: {  }
+theme: {  }
+complete_list:
+  - symfony_mailer.mailer_transport.smtp
+partial_list: {  }

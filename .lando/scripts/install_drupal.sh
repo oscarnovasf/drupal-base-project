@@ -254,11 +254,8 @@ function create_manager() {
   ${DRUSH} user-add-role manager manager
 
   # Asigno permisos por defecto al usuario manager.
+  echo " "
   for i in "${MANAGER_PERMISSIONS[@]}"; do
-    echo " "
-    echo -e " ${GREEN}Asignando permiso: ${i}...${RESET}"
-    linea
-    echo " "
     ${DRUSH} role-add-perm "manager" "${i}"
   done
 }
@@ -298,26 +295,26 @@ function import_config() {
 
   # Realizo importaciones de configuraciones (Drupal).
   echo ' '
-  ${DRUSH} config-import --partial --source="$(pwd)"/config/base/config_files/drupal/ -y
+  ${DRUSH} config-import --partial --source="$(pwd)"/config/base/drupal/ -y
 
   # Realizo importaciones de configuraciones (Módulos).
   echo ' '
-  ${DRUSH} config-import --partial --source="$(pwd)"/config/base/config_files/modulos/ -y
+  ${DRUSH} config-import --partial --source="$(pwd)"/config/base/modulos/general/ -y
 
   # Realizo importaciones de configuraciones (Vistas).
   echo ' '
-  ${DRUSH} config-import --partial --source="$(pwd)"/config/base/config_files/vistas/ -y
+  ${DRUSH} config-import --partial --source="$(pwd)"/config/base/vistas/ -y
 }
 
 # Importa las configuraciones base.
 function import_config_devel() {
   clear
     linea
-    echo -e " ${YELLOW}Importando configuraciones iniciales (develop)...${RESET}"
+    echo -e " ${YELLOW}Importando configuraciones iniciales (development)...${RESET}"
     linea
 
     echo ' '
-    ${DRUSH} config-import --partial --source="$(pwd)"/config/base/config_files/develop/ -y
+    ${DRUSH} config-import --partial --source="$(pwd)"/config/base/modulos/devel/ -y
 }
 
 # Realiza un volcado de la base de datos.
@@ -405,7 +402,8 @@ else
 
   # Activo módulos.
   # activate_sandbox_modules
-  # activate_modules
+  activate_modules
+  import_config
 
   # Creo usuario manager.
   create_manager
@@ -413,15 +411,12 @@ else
   # Elimino cosas innecesarias de Drupal.
   clear_drupal
 
-  # Importo las configuraciones base.
-  # import_config
-
   # Realizo backup de la BBDD antes de activar los módulos de desarrollo.
   dump_bbdd
 
   # Activo módulos de desarrollo.
   activate_devel_modules
-  # import_config_devel
+  import_config_devel
 fi
 
 

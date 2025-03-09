@@ -1,0 +1,16 @@
+langcode: es
+status: true
+dependencies: {  }
+id: stg
+label: 'Pre-Producción'
+description: 'Configuración para entorno de Pre-Producción'
+weight: 2
+stackable: false
+no_patching: false
+storage: folder
+folder: ../config/sync/stg
+module: {  }
+theme: {  }
+complete_list:
+  - symfony_mailer.mailer_transport.smtp
+partial_list: {  }

@@ -1,0 +1,22 @@
+langcode: es
+status: true
+dependencies: {  }
+id: loc
+label: Local
+description: 'Configuración para entorno LOCAL preferiblemente con Lando'
+weight: 0
+stackable: false
+no_patching: false
+storage: folder
+folder: ../config/sync/loc
+module:
+  devel: 0
+  devel_generate: 0
+  devel_kint_extras: 0
+  devel_php: 0
+  twig_vardumper: 0
+  devel_generate_fields: 0
+theme: {  }
+complete_list:
+  - symfony_mailer.mailer_transport.smtp
+partial_list: {  }
