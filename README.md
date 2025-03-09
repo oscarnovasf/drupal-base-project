@@ -1,10 +1,10 @@
-# Drupal: Base Project
----
+Drupal: Base Project
+===
 
-[![version][version-badge]][changelog] [![Licencia][license-badge]][license] [![Código de conducta][conduct-badge]][conduct]
-
-> [!IMPORTANT]
 > Plantilla para [Composer](https://getcomposer.org/) de instalación de Drupal.
+
+[![version][version-badge]][changelog] [![Licencia][license-badge]][license] [![Código de conducta][conduct-badge]][conduct]  
+[![wakatime](https://wakatime.com/badge/user/236d57da-61e8-46f2-980b-7af630b18f42/project/f988ef5a-1e85-4d32-9121-75c552c747ec.svg)](https://wakatime.com/badge/user/236d57da-61e8-46f2-980b-7af630b18f42/project/f988ef5a-1e85-4d32-9121-75c552c747ec)
 
 ## Requerimientos
 
@@ -39,19 +39,19 @@
   * Establecemos el nombre del proyecto en nuestro `composer.custom.json`.
   * Ejecutamos `lando start` para montar los contenedores del proyecto.
 
-    > [!NOTE]
-    > De forma opcional podemos usar el script [iniciar-proyecto](https://github.com/oscarnovasf/iniciar-proyecto)
-    > para descargar e iniciar un proyecto nuevo.
+> [!NOTE]
+> De forma opcional podemos usar el script [iniciar-proyecto](https://github.com/oscarnovasf/iniciar-proyecto)
+> para descargar e iniciar un proyecto nuevo.
 
-    > [!IMPORTANT]
-    > Al usar Lando, es recomendable que todos los scripts se ejecuten dentro
-    > del contenedor, salvo que se use `lando drush` o `lando composer`.
+> [!IMPORTANT]
+> Al usar Lando, es recomendable que todos los scripts se ejecuten dentro
+> del contenedor, salvo que se use `lando drush` o `lando composer`.
 
-    > [!CAUTION]
-    > Este proyecto incluye un script que se ejecuta como hook de Lando al
-    > ejecutar el comando `lando destroy`, se trata de un script propio del
-    > desarrollo de esta plantilla y quizás quieras eliminarlo para prevenir
-    > errores en tu proyecto (`./.lando/scripts/destroy_lando.sh`).
+> [!CAUTION]
+> Este proyecto incluye un script que se ejecuta como hook de Lando al
+> ejecutar el comando `lando destroy`, se trata de un script propio del
+> desarrollo de esta plantilla y quizás quieras eliminarlo para prevenir
+> errores en tu proyecto (`./.lando/scripts/destroy_lando.sh`).
 
 * ### Usuarios por defecto:
 
