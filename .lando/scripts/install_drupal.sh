@@ -303,7 +303,7 @@ function import_config() {
 
   # Realizo importaciones de configuraciones (Vistas).
   echo ' '
-  ${DRUSH} config-import --partial --source="$(pwd)"/config/base/vistas/ -y
+  ${DRUSH} config-import --partial --source="$(pwd)"/config/base/views/ -y
 }
 
 # Importa las configuraciones base.
