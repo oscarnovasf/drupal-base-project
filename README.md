@@ -62,6 +62,26 @@ Drupal: Base Project
   |admin|admin|password|admin@example.com|
   |manager|manager|password|manager@example.com|
 
+## Scripts
+
+Este proyecto incluye una serie de scripts y su respectivo comando específico
+para su uso con [Lando](https://lando.dev/).
+
+
+## Otros scripts
+
+* ### ./scripts/shell/share.sh
+  > Script para generar un túnel y poder compartir nuestro proyecto local
+  > fuera de nuestra red.
+
+  Este script hace uso de [ngrok](https://ngrok.com/) por lo que será necesario
+  crearse una cuenta y configurar el API Key en nuestro entorno local.
+  Al ejecutarse se genera una url que podemos utilizar desde una máquina
+  externa para conectarnos a nuestro sistema.
+
+  > El script usa Lando para obtener la url pero no se puede ejecutar dentro
+  > de Lando, por lo que no está disponible ningún atajo al comando.
+
 
 ---
 
