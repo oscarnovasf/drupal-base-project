@@ -22,3 +22,8 @@ $config['system.logging']['error_level'] = 'verbose';
 
 $config['system.performance']['css']['preprocess'] = FALSE;
 $config['system.performance']['js']['preprocess']  = FALSE;
+
+if (class_exists('Kint')) {
+  // Change the maximum depth to prevent out-of-memory errors.
+  \Kint::$depth_limit= 4;
+}

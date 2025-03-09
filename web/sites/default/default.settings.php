@@ -949,8 +949,8 @@ switch (getenv('DRUPAL_ENV')) {
   case 'loc':
   case 'dev':
   default:
-    if (!empty(getenv('DRUPAL_PROD_URL'))) {
-      $config['stage_file_proxy.settings']['origin'] = getenv('DRUPAL_PROD_URL');
+    if (!empty(getenv('DRUPAL_PRO_URL'))) {
+      $config['stage_file_proxy.settings']['origin'] = getenv('DRUPAL_PRO_URL');
     }
     /* Con esto nos aseguramos que no se nos escapan las configuraciones de
      * desarrollo a producción */

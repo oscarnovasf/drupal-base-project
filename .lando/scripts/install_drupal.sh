@@ -238,14 +238,6 @@ function activate_devel_modules() {
       echo " "
       ${DRUSH} -y en "${i}"
     done
-
-    clear
-    linea
-    echo -e " ${YELLOW}Importando configuraciones iniciales...${RESET}"
-    linea
-
-    echo ' '
-    ${DRUSH} config-import --partial --source="$(pwd)"/config/base/config_files/develop/ -y
   fi
 }
 
@@ -315,6 +307,17 @@ function import_config() {
   # Realizo importaciones de configuraciones (Vistas).
   echo ' '
   ${DRUSH} config-import --partial --source="$(pwd)"/config/base/config_files/vistas/ -y
+}
+
+# Importa las configuraciones base.
+function import_config_devel() {
+  clear
+    linea
+    echo -e " ${YELLOW}Importando configuraciones iniciales (develop)...${RESET}"
+    linea
+
+    echo ' '
+    ${DRUSH} config-import --partial --source="$(pwd)"/config/base/config_files/develop/ -y
 }
 
 # Realiza un volcado de la base de datos.
@@ -417,7 +420,8 @@ else
   dump_bbdd
 
   # Activo módulos de desarrollo.
-  # activate_devel_modules
+  activate_devel_modules
+  # import_config_devel
 fi
 
 
