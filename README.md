@@ -79,9 +79,7 @@ para su uso con [Lando](https://lando.dev/).
   > de Lando, por lo que no está disponible ningún atajo al comando.
 
 
-> [!NOTE]
-> [^1]: De forma opcional podemos usar el script [iniciar-proyecto](https://github.com/oscarnovasf/iniciar-proyecto) para descargar e iniciar un proyecto nuevo.
-
+[^1]: De forma opcional podemos usar el script [iniciar-proyecto](https://github.com/oscarnovasf/iniciar-proyecto) para descargar e iniciar un proyecto nuevo.
 
 ---
 
