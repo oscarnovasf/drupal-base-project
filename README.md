@@ -79,8 +79,11 @@ para su uso con [Lando](https://lando.dev/).
   > de Lando, por lo que no está disponible ningún atajo al comando.
 
 
+> [!NOTE]
+> [^1]: De forma opcional podemos usar el script [iniciar-proyecto](https://github.com/oscarnovasf/iniciar-proyecto) para descargar e iniciar un proyecto nuevo.
+
+
 ---
-[^1]: De forma opcional podemos usar el script [iniciar-proyecto](https://github.com/oscarnovasf/iniciar-proyecto) para descargar e iniciar un proyecto nuevo.
 
 [version]: v1.0.0
 [version-badge]: https://img.shields.io/badge/Versión-1.0.0-blue.svg
