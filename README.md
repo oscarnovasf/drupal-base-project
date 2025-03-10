@@ -1,7 +1,7 @@
 Drupal: Base Project
 ===
 
-> Plantilla para [Composer](https://getcomposer.org/) de instalación de Drupal.
+Plantilla para [Composer](https://getcomposer.org/) de instalación de Drupal.
 
 [![version][version-badge]][changelog] [![Licencia][license-badge]][license] [![Código de conducta][conduct-badge]][conduct]  
 [![wakatime](https://wakatime.com/badge/user/236d57da-61e8-46f2-980b-7af630b18f42/project/f988ef5a-1e85-4d32-9121-75c552c747ec.svg)](https://wakatime.com/badge/user/236d57da-61e8-46f2-980b-7af630b18f42/project/f988ef5a-1e85-4d32-9121-75c552c747ec)
@@ -31,17 +31,13 @@ Drupal: Base Project
 ## Instalación
 
 * ### Proceso de instalación: [LANDO](https://lando.dev/)
-  * Copiamos el contenido del proyecto en una carpeta de nuestra máquina.
+  * Copiamos el contenido del proyecto en una carpeta de nuestra máquina[^1].
   * Establecemos los valores correctos en el archivo `.lando.yml` para la
     conexión con la base de datos y el nombre del proyecto.
   * Creamos el archivo `.env` a partir de `.env.example` y establecemos los
     valores a las variables.
   * Establecemos el nombre del proyecto en nuestro `composer.custom.json`.
   * Ejecutamos `lando start` para montar los contenedores del proyecto.
-
-> [!NOTE]
-> De forma opcional podemos usar el script [iniciar-proyecto](https://github.com/oscarnovasf/iniciar-proyecto)
-> para descargar e iniciar un proyecto nuevo.
 
 > [!IMPORTANT]
 > Al usar Lando, es recomendable que todos los scripts se ejecuten dentro
@@ -84,6 +80,7 @@ para su uso con [Lando](https://lando.dev/).
 
 
 ---
+[^1]: De forma opcional podemos usar el script [iniciar-proyecto](https://github.com/oscarnovasf/iniciar-proyecto) para descargar e iniciar un proyecto nuevo.
 
 [version]: v1.0.0
 [version-badge]: https://img.shields.io/badge/Versión-1.0.0-blue.svg
