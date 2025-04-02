@@ -79,7 +79,7 @@
         "drupal/webform": "^6.3@beta",
         "drupal/webform_views": "^5.5",
 
-        "drush/drush": "^13.3",
+        "drush/drush": "^13.4",
 
         "npm-asset/select2": "^4.0",
 
@@ -107,7 +107,7 @@
         "phpmd/phpmd": "^2.15",
         "phpstan/phpstan-strict-rules": "^1.6",
 
-        "phpro/grumphp-shim": "^2.10",
+        "phpro/grumphp-shim": "^2.11",
         "friendsoftwig/twigcs": "^6.5",
 
         "palantirnet/drupal-rector": "^0.20"
