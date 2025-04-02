@@ -14,7 +14,7 @@ Plantilla para [Composer](https://getcomposer.org/) de instalación de Drupal.
   * Si se quiere poder enviar una url de nuestro proyecto en local con [Lando](https://lando.dev/),
     es necesario instalar y configurar [NGROK](https://ngrok.com/).
 
-* ### Herramientas para servidores (pre, stg o pro)
+* ### Herramientas para servidores (dev, stg o pro)
   * Es necesario tener instalada la herramienta [JQ](https://stedolan.github.io/jq/)
     para la línea de comandos.
   * Es necesario tener instalada la herramienta [PV](http://www.ivarch.com/programs/pv.shtml)
@@ -39,10 +39,6 @@ Plantilla para [Composer](https://getcomposer.org/) de instalación de Drupal.
   * Establecemos el nombre del proyecto en nuestro `composer.custom.json`.
   * Ejecutamos `lando start` para montar los contenedores del proyecto.
 
-> [!IMPORTANT]
-> Al usar Lando, es recomendable que todos los scripts se ejecuten dentro
-> del contenedor, salvo que se use `lando drush` o `lando composer`.
-
 > [!CAUTION]
 > Este proyecto incluye un script que se ejecuta como hook de Lando al
 > ejecutar el comando `lando destroy`, se trata de un script propio del
@@ -57,6 +53,42 @@ Plantilla para [Composer](https://getcomposer.org/) de instalación de Drupal.
   |---|---|---|---|
   |admin|admin|password|admin@example.com|
   |manager|manager|password|manager@example.com|
+
+## Comandos personalizados para Drush
+
+Este proyecto define dos comandos personalizados para ejecutarse con Drush.  
+Se trata de una serie de comandos que facilitan la ejecución secuencial de otros
+comandos aglutinando su ejecución en un sólo comando.
+
+* ### custom:pre-commit
+
+  El comando estandariza el procedimiento a seguir en Drupal tras ejecutar
+  composer para actualizar módulos, unificando la ejecución de los siguientes
+  comandos en uno solo:
+
+  ```shell
+  drush updatedb
+  drush locale:check
+  drush locale:update
+  drush config:export
+  drush cache:rebuild
+  ```
+
+* ### custom:deploy
+
+  El comando estandariza el funcionamiento de los despliegues de Drupal,
+  unificando la ejecución de los siguientes comandos en uno solo:
+
+  ```shell
+  drush updatedb
+  drush config:import
+  drush cache:rebuild
+  drush deploy:hook
+  drush locale:check
+  drush locale:update
+  drush config:import
+  drush cache:rebuild
+  ```
 
 ## Scripts
 
