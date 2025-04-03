@@ -57,6 +57,7 @@
         "drupal/linkit": "^7.0",
         "drupal/metatag": "^2.1",
         "drupal/module_filter": "^5.0",
+        "drupal/node_revision_delete": "^2.0",
         "drupal/paragraphs": "^1.19",
         "drupal/pathauto": "^1.13",
         "drupal/quicklink": "^2.0",
