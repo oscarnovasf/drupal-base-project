@@ -1,12 +1,13 @@
 <?php
 
-namespace Drush\Commands\custom;
+namespace Drush\Commands;
 
 use Consolidation\SiteAlias\SiteAlias;
 use Consolidation\SiteAlias\SiteAliasManagerAwareTrait;
 use Consolidation\SiteProcess\ProcessManager;
 use Drush\Attributes as CLI;
 use Drush\Boot\DrupalBootLevels;
+use Drush\Commands\DrushCommands;
 use Drush\Drush;
 use Drush\SiteAlias\SiteAliasManagerAwareInterface;
 
@@ -20,6 +21,11 @@ final class CustomDeployCommands extends DrushCommands implements SiteAliasManag
   private const DEPLOY = 'custom:deploy';
 
   private const PRE_COMMIT = 'custom:pre-commit';
+
+  #[CLI\Command(name: 'custom:test')]
+  public function test(): void {
+    $this->output()->writeln('Custom command works!');
+  }
 
   /**
    * Run updates, config import, deploy hooks and locale updates.

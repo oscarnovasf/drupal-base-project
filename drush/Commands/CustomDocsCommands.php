@@ -1,8 +1,9 @@
 <?php
 
-namespace Drush\Commands\custom;
+namespace Drush\Commands;
 
 use Drush\Attributes as CLI;
+use Drush\Commands\DrushCommands;
 
 /**
  * Topic commands.
@@ -21,7 +22,7 @@ final class CustomDocsCommands extends DrushCommands {
    */
   #[CLI\Command(name: self::DEPLOY)]
   #[CLI\Help(hidden: TRUE)]
-  #[CLI\Topics(path: './docs/custom_deploy_command.md')]
+  #[CLI\Topics(path: '../docs/custom_deploy_command.md')]
   public function deploy(): void {
     if ($this->commandData) {
       $this->printFileTopic($this->commandData);
@@ -33,7 +34,7 @@ final class CustomDocsCommands extends DrushCommands {
    */
   #[CLI\Command(name: self::PRE_COMMIT)]
   #[CLI\Help(hidden: TRUE)]
-  #[CLI\Topics(path: './docs/custom_pre_commit_command.md')]
+  #[CLI\Topics(path: '../docs/custom_pre_commit_command.md')]
   public function preCommit(): void {
     if ($this->commandData) {
       $this->printFileTopic($this->commandData);
