@@ -79,6 +79,7 @@
         "drupal/verf": "^2.1",
         "drupal/views_bulk_operations": "^4.3",
         "drupal/views_data_export": "^1.5",
+        "drupal/views_negate": "^2.0",
         "drupal/view_password": "^6.0",
         "drupal/webform": "^6.3@beta",
         "drupal/webform_views": "^5.5",
