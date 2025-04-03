@@ -26,15 +26,6 @@ YELLOW="\033[0;33m"
 RED="\033[0;31m"
 GREEN="\033[0;32m"
 
-# Rutas de los archivos.
-CONTRIB_MODULES_PATH="modules/contrib"
-CONTRIB_THEMES_PATH="themes/contrib"
-CONTRIB_PROFILES_PATH="profiles/contrib"
-CONTRIB_DRUSH_PATH="drush/Commands/contrib"
-DRUPAL_SETTINGS="sites/default/settings.php"
-DRUPAL_CORE="core"
-DRUPAL_LIBRARIES="libraries"
-
 
 # ##############################################################################
 # FUNCIONES AUXILIARES.
@@ -45,27 +36,19 @@ function linea() {
   echo '--------------------------------------------------------------------------------'
 }
 
-# Lee archivo de configuración.
-function load_env() {
-  ENV_FILE=.env
-  if [ ! -f "${ENV_FILE}" ]; then
-    clear
-    linea
-    echo -e " ${RED}No existe el archivo de variables de entorno (.env).${RESET}"
-    linea
-    exit 1
-  else
-    source "$(echo ${ENV_FILE})"
-  fi
+# Función que imprime las instrucciones de uso.
+usage() {
+  echo " "
+  linea
+  echo -e " ${GREEN}Script de limpieza del proyecto.${RESET}"
+  linea
+  echo " "
+  echo " Uso: ${SELF} [-y|--yes]"
+  echo " "
+  echo " [-y|--yes] Realiza la operación, si no se especifica simplemente"
+  echo "            muestra los archivos que se borrarán."
+  echo " "
 }
-
-
-# ##############################################################################
-# COMPROBACIONES PREVIAS.
-# ##############################################################################
-
-# Leo variables de entorno
-load_env
 
 
 # ##############################################################################
@@ -73,60 +56,37 @@ load_env
 # ##############################################################################
 
 clear
-linea
-echo -e " ${YELLOW}Iniciando el borrado de archivos.${RESET}"
-linea
 
-# Ajusto permisos para que no falle la nueva instalación.
-chmod 777 ${WEB_ROOT}/sites
-chmod 777 ${WEB_ROOT}/sites/default
+# Verifico los parámetros pasados al script.
+SHOW_HELP=false
+EXECUTE_CLEAN=false
 
-# Elimino módulos contrib.
-if [ -d "${WEB_ROOT}/${CONTRIB_MODULES_PATH}" ]; then
-  echo -e " - Eliminando ${YELLOW}'${WEB_ROOT}/${CONTRIB_MODULES_PATH}'${RESET}..."
-  rm -fr "${WEB_ROOT:?}/${CONTRIB_MODULES_PATH}"
-fi
+for arg in "$@"; do
+  case $arg in
+    -h|--help)
+      SHOW_HELP=true
+      ;;
+    -y|--yes)
+      EXECUTE_CLEAN=true
+      ;;
+  esac
+done
 
-# Elimino plantillas contrib.
-if [ -d "${WEB_ROOT}/${CONTRIB_THEMES_PATH}" ]; then
-  echo -e " - Eliminando ${YELLOW}'${WEB_ROOT}/${CONTRIB_THEMES_PATH}'${RESET}..."
-  rm -fr "${WEB_ROOT:?}/${CONTRIB_THEMES_PATH}"
-fi
-
-# Elimino profiles contrib.
-if [ -d "${WEB_ROOT}/${CONTRIB_PROFILES_PATH}" ]; then
-  echo -e " - Eliminando ${YELLOW}'${WEB_ROOT}/${CONTRIB_PROFILES_PATH}'${RESET}..."
-  rm -fr "${WEB_ROOT:?}/${CONTRIB_PROFILES_PATH}"
-fi
-
-# Elimino drush commands contrib.
-if [ -d "./${CONTRIB_DRUSH_PATH}" ]; then
-  echo -e " - Eliminando ${YELLOW}'./${CONTRIB_DRUSH_PATH}'${RESET}..."
-  rm -fr "./${CONTRIB_DRUSH_PATH}"
-fi
-
-# Elimino configuración.
-if [ -d "${WEB_ROOT}/${DRUPAL_SETTINGS}" ]; then
-  echo -e " - Eliminando ${YELLOW}'${WEB_ROOT}/${DRUPAL_SETTINGS}'${RESET}..."
-  rm -fr "${WEB_ROOT:?}/${DRUPAL_SETTINGS}"
-fi
-
-# Elimino el core de Drupal.
-if [ -d "${WEB_ROOT}/${DRUPAL_CORE}" ]; then
-  echo -e " - Eliminando ${YELLOW}'${WEB_ROOT}/${DRUPAL_CORE}'${RESET}..."
-  rm -fr "${WEB_ROOT:?}/${DRUPAL_CORE}"
-fi
-
-# Elimino libraries.
-if [ -d "${WEB_ROOT}/${DRUPAL_LIBRARIES}" ]; then
-  echo -e " - Eliminando ${YELLOW}'${WEB_ROOT}/${DRUPAL_LIBRARIES}'${RESET}..."
-  rm -fr "${WEB_ROOT:?}/${DRUPAL_LIBRARIES}"
-fi
-
-# Elimino carpeta vendor.
-if [ -d "vendor" ]; then
-  echo -e " - Eliminando ${YELLOW}'./vendor'...${RESET}"
-  rm -fr "vendor"
+if [ "$SHOW_HELP" = true ]; then
+  usage
+  exit 0
+elif [ "$EXECUTE_CLEAN" = true ]; then
+  linea
+  echo -e " ${GREEN}Iniciando el borrado de archivos.${RESET}"
+  linea
+  git config --global --add safe.directory /app
+  git clean -fdx
+else
+  linea
+  echo -e " ${GREEN}Estos serían los archivos a borrar:${RESET}"
+  linea
+  git config --global --add safe.directory /app
+  git clean -fdxn
 fi
 
 
@@ -138,10 +98,12 @@ fi
 end=$(date +%s)
 runtime=$((end-start))
 
-clear
-linea
-echo -e " ${GREEN}Proyecto reiniciado correctamente.${RESET}"
-linea
+if [ "$EXECUTE_CLEAN" = true ]; then
+  clear
+  linea
+  echo -e " ${GREEN}Proyecto reiniciado correctamente.${RESET}"
+  linea
+fi
 echo " "
 echo " Tiempo de ejecución: ${runtime}s"
 echo " "

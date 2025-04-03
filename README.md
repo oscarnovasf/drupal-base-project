@@ -3,8 +3,10 @@ Drupal: Base Project
 
 Plantilla para [Composer](https://getcomposer.org/) de instalación de Drupal.
 
-[![version][version-badge]][changelog] [![Licencia][license-badge]][license] [![Código de conducta][conduct-badge]][conduct]  
+[![version][version-badge]][changelog] [![Licencia][license-badge]][license] [![Código de conducta][conduct-badge]][conduct]
 [![wakatime](https://wakatime.com/badge/user/236d57da-61e8-46f2-980b-7af630b18f42/project/f988ef5a-1e85-4d32-9121-75c552c747ec.svg)](https://wakatime.com/badge/user/236d57da-61e8-46f2-980b-7af630b18f42/project/f988ef5a-1e85-4d32-9121-75c552c747ec)
+
+<img src="https://img.shields.io/liberapay/patrons/ONovasDev.svg?logo=liberapay">
 
 ## Requerimientos
 
@@ -56,7 +58,7 @@ Plantilla para [Composer](https://getcomposer.org/) de instalación de Drupal.
 
 ## Comandos personalizados para Drush
 
-Este proyecto define dos comandos personalizados para ejecutarse con Drush.  
+Este proyecto define dos comandos personalizados para ejecutarse con Drush.
 Se trata de una serie de comandos que facilitan la ejecución secuencial de otros
 comandos aglutinando su ejecución en un sólo comando.
 
@@ -94,6 +96,15 @@ comandos aglutinando su ejecución en un sólo comando.
 
 Este proyecto incluye una serie de scripts y su respectivo comando específico
 para su uso con [Lando](https://lando.dev/).
+
+* ### ./scripts/shell/initialize.sh (`lando initialize`)
+  Se encarga de reiniciar el proyecto eliminando todos los archivos y
+  directorios que no están incluidos en el repositorio.
+
+  |Parámetro|Descripción|
+  |---|---|
+  |**-y \| --yes**|Realiza la limpieza, si no se especifica sólo muestra los archivos que podrán ser eliminados.|
+  |**-h \| --help**|Muestra la ayuda.|
 
 
 ## Otros scripts
