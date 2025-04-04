@@ -115,6 +115,15 @@ para su uso con [Lando](https://lando.dev/).
   |**-y \| --yes**|Realiza la limpieza, si no se especifica sólo muestra los archivos que podrán ser eliminados.|
   |**-h \| --help**|Muestra la ayuda.|
 
+* #### trans.sh
+  Script para importar/exportar las traducciones (excepto el inglés).
+  Admite cualquiera de estos parámetros (sólo uno y obligatorio):
+
+  |Parámetro|Descripción|
+  |---|---|
+  |**im**|Realiza la importación de las traducciones.|
+  |**ex**|Realiza la exportación de las traducciones.|
+
 
 ## Otros scripts
 
