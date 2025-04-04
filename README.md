@@ -97,6 +97,15 @@ comandos aglutinando su ejecución en un sólo comando.
 Este proyecto incluye una serie de scripts y su respectivo comando específico
 para su uso con [Lando](https://lando.dev/).
 
+* ### ./scripts/shell/db.sh (`lando db`)
+  Script para importar/exportar el contenido de la base de datos.
+  Admite cualquiera de estos parámetros (sólo uno y obligatorio):
+
+  |Parámetro|Descripción|
+  |---|---|
+  |**im**|Realiza la importación de la base de datos.|
+  |**ex**|Realiza la exportación de la base de datos.|
+
 * ### ./scripts/shell/initialize.sh (`lando initialize`)
   Se encarga de reiniciar el proyecto eliminando todos los archivos y
   directorios que no están incluidos en el repositorio.
