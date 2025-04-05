@@ -51,7 +51,7 @@ function linea() {
 }
 
 # Función que imprime las instrucciones de uso.
-usage() {
+function usage() {
   echo " "
   linea
   echo -e " Script de importación / exportación de las traducciones."

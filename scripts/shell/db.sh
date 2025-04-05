@@ -51,7 +51,7 @@ function linea() {
 }
 
 # Función que imprime las instrucciones de uso.
-usage() {
+function usage() {
   echo " "
   linea
   echo -e " ${GREEN}Script de importación / exportación de la base de datos.${RESET}"
