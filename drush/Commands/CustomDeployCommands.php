@@ -22,11 +22,6 @@ final class CustomDeployCommands extends DrushCommands implements SiteAliasManag
 
   private const PRE_COMMIT = 'custom:pre-commit';
 
-  #[CLI\Command(name: 'custom:test')]
-  public function test(): void {
-    $this->output()->writeln('Custom command works!');
-  }
-
   /**
    * Run updates, config import, deploy hooks and locale updates.
    */
