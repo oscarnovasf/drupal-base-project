@@ -74,6 +74,7 @@
         "drupal/svg_image": "^3.2",
         "drupal/tagify": "^1.2",
         "drupal/token_filter": "^2.2",
+        "drupal/token_or": "^2.3",
         "drupal/twig_field_value": "^2.0",
         "drupal/twig_tweak": "^3.4",
         "drupal/verf": "^2.1",
@@ -84,7 +85,7 @@
         "drupal/webform": "^6.3@beta",
         "drupal/webform_views": "^5.5",
 
-        "drush/drush": "^13.4",
+        "drush/drush": "^13.5",
 
         "mikehaertl/phpwkhtmltopdf": "^2.5",
         "oomphinc/composer-installers-extender": "^2.0",
