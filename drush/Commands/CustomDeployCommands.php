@@ -29,18 +29,29 @@ final class CustomDeployCommands extends DrushCommands implements SiteAliasManag
   #[CLI\Usage(name: 'drush ' . self::DEPLOY, description: 'Run updates, config import, deploy hooks and locale updates.')]
   #[CLI\Topics(topics: [CustomDocsCommands::DEPLOY])]
   #[CLI\Bootstrap(level: DrupalBootLevels::FULL)]
-  public function deploy(): void {
+  public function deploy(array $options = ['no-cim' => false]): void {
     $self = $this->siteAliasManager()->getSelf();
     $redispatchOptions = Drush::redispatchOptions();
     $manager = $this->processManager();
 
+    // Remove the --no-cim option from redispatch options to avoid passing it to internal commands.
+    unset($redispatchOptions['no-cim']);
+
     $this->runCommand($manager, $self, $redispatchOptions, 'updatedb', 'Database updates start');
-    $this->runCommand($manager, $self, $redispatchOptions, 'config:import', 'Config import start');
+
+    if (!$options['no-cim']) {
+      $this->runCommand($manager, $self, $redispatchOptions, 'config:import', 'Config import start');
+    }
+
     $this->runCommand($manager, $self, $redispatchOptions, 'cache:rebuild', 'Cache rebuild start');
     $this->runCommand($manager, $self, $redispatchOptions, 'deploy:hook', 'Deploy hook start');
     $this->runCommand($manager, $self, $redispatchOptions, 'locale:check', 'Locale check start');
     $this->runCommand($manager, $self, $redispatchOptions, 'locale:update', 'Locale update start');
-    $this->runCommand($manager, $self, $redispatchOptions, 'config:import', 'Config import start');
+
+    if (!$options['no-cim']) {
+      $this->runCommand($manager, $self, $redispatchOptions, 'config:import', 'Config import start');
+    }
+
     $this->runCommand($manager, $self, $redispatchOptions, 'cache:rebuild', 'Cache rebuild start');
   }
 

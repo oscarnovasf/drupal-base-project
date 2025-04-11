@@ -48,6 +48,22 @@ function linea() {
   echo '--------------------------------------------------------------------------------'
 }
 
+# Función que imprime las instrucciones de uso.
+function usage() {
+  echo " "
+  linea
+  echo -e " Script para cambiar el entorno del proyecto."
+  linea
+  echo " "
+  echo " Uso: ${SELF} [loc|dev|stg|pro]"
+  echo " "
+  echo " [loc] Entorno local (desarrollo)."
+  echo " [dev] Entorno de desarrollo."
+  echo " [stg] Entorno de preproducción."
+  echo " [pro] Entorno de producción."
+  echo " "
+}
+
 # Lee archivo de configuración.
 function load_env() {
   ENV_FILE=.env
@@ -95,15 +111,10 @@ function change_env() {
   local ENVIRONMENT=$1
 
   if [[ "$ENVIRONMENT" =~ ^(loc|dev|stg|pro)$ ]]; then
-    echo " "
-    echo -e " ${YELLOW}Estableciendo entorno a '${ENVIRONMENT}'...${RESET}"
-    linea
-
-    sed -i "s/^CONFIG_SPLIT_ENV=.*/CONFIG_SPLIT_ENV=${ENVIRONMENT}/" "${ENV_FILE}"
+    echo -e " ${YELLOW}Estableciendo entorno a '${ENVIRONMENT}'.${RESET}"
+    sed -i "s/^DRUPAL_ENV=.*/DRUPAL_ENV=${ENVIRONMENT}/" "${ENV_FILE}"
   else
-    echo " "
     echo -e " ${RED}Error: El entorno '${ENVIRONMENT}' no es válido. Usa loc, dev, stg o pro.${RESET}"
-    linea
     exit 1
   fi
 }
@@ -133,13 +144,19 @@ check_requirements
 export COMPOSER_ALLOW_SUPERUSER=1;
 export COMPOSER_MEMORY_LIMIT=-1;
 export COMPOSER_PROCESS_TIMEOUT=600
--
+
+clear
+linea
+echo -e " ${YELLOW}Limpiando caché de composer.${RESET}"
+linea
+composer clear-cache
 
 # ##############################################################################
 # INICIO DEL SCRIPT.
 # ##############################################################################
 
 clear
+linea
 
 # Compruebo el entorno pasado como parámetro.
 ENVIRONMENT=$1
@@ -148,56 +165,47 @@ case "$ENVIRONMENT" in
   loc|dev)
     # Pongo el Drupal en modo mantenimiento.
     ${DRUSH} sset system.maintenance_mode TRUE
-    echo " "
-    echo -e " ${YELLOW}Estableciendo entorno a '${ENVIRONMENT}'...${RESET}"
-    linea
     change_env "$ENVIRONMENT"
-
-    echo " "
-    echo -e " ${YELLOW}Actualizando dependencias de desarrollo...${RESET}"
     linea
-    composer install
 
-    echo " "
-    echo -e " ${YELLOW}Activando módulos de desarrollo...${RESET}"
+    echo -e "\n ${YELLOW}Actualizando dependencias de desarrollo...${RESET}"
     linea
-    for i in "${DEV_DRUSH_NAMES[@]}"; do
-      echo " "
-      echo -e " Activando ${GREEN}${i}${RESET}..."
-      ${DRUSH} -y en "${i}"
+    composer install --no-cache
+
+    echo -e "\n ${YELLOW}Activando módulos de desarrollo...${RESET}"
+    linea
+    for module in "${DEV_DRUSH_NAMES[@]}"; do
+      # echo -e "\n Activando ${GREEN}${module}${RESET}..."
+      ${DRUSH} -y en "${module}"
     done
 
-    echo -e " ${YELLOW}Importando configuraciones de desarrollo...${RESET}"
+    echo -e "\n ${YELLOW}Importando configuraciones de desarrollo...${RESET}"
     linea
-    ${DRUSH} config-import --partial --source=$(pwd)/config/base/modules/devel/ -y
+    ${DRUSH} config-import --partial --source=$(pwd)/config/base/modulos/devel/ -y
     ;;
 
   stg|pro)
     # Pongo el Drupal en modo mantenimiento.
     ${DRUSH} sset system.maintenance_mode TRUE
-    echo " "
-    echo -e " ${YELLOW}Estableciendo entorno a '${ENVIRONMENT}'...${RESET}"
-    linea
     change_env "$ENVIRONMENT"
-
-    echo -e " ${YELLOW}Desactivando módulos...${RESET}"
     linea
-    for i in "${DEV_DRUSH_NAMES_UNINSTALL[@]}"; do
-      echo " "
-      echo -e " Desinstalando ${GREEN}${i}${RESET}..."
-      ${DRUSH} -y pm:uninstall "${i}"
+
+    echo -e "\n ${YELLOW}Desactivando módulos...${RESET}"
+    linea
+    for module in "${DEV_DRUSH_NAMES_UNINSTALL[@]}"; do
+      ${DRUSH} -y pm:uninstall "${module}" 2>/dev/null || echo -e " ${RED}No se pudo desinstalar ${module}.${RESET}"
     done
     ${DRUSH} cache-rebuild
 
-    echo -e " ${YELLOW}Eliminando módulos...${RESET}"
+    echo -e "\n ${YELLOW}Eliminando módulos...${RESET}"
     linea
-    composer install --no-dev
+    composer install --no-dev --no-cache
     ;;
 
   *)
     # Desactivo modo de mantenimiento.
     ${DRUSH} sset system.maintenance_mode FALSE
-    echo " "
+    linea
     echo -e " ${RED}Error: El entorno '${ENVIRONMENT}' no es válido. Usa loc, dev, stg o pro.${RESET}"
     linea
     exit 1
@@ -219,7 +227,7 @@ linea
 echo " "
 
 # Ejecuto tareas de deploy.
-${DRUSH} custom:deploy
+${DRUSH} custom:deploy --no-cim
 
 # Calculo el tiempo de ejecución y muestro mensaje de final del script.
 end=$(date +%s)

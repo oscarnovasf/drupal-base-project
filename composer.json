@@ -28,6 +28,7 @@
         "ext-apcu": "*",
         "ext-zlib": "*",
 
+        "composer/composer": "^2.8",
         "composer/installers": "^2.3",
         "cweagans/composer-patches": "^1.7",
 
@@ -98,18 +99,15 @@
         "drupal/core-dev": "^11.1",
         "drupal/drupal-extension": "^5.1",
 
-        "drupal/composer_deploy": "^1.10",
         "drupal/config_delete": "^2.0",
         "drupal/devel": "^5.3",
         "drupal/devel_kint_extras": "^1.1",
         "drupal/devel_php": "^1.7",
-        "drupal/twig_vardumper": "^3.2",
-        "drupal/upgrade_status": "^4.3",
 
         "phpmd/phpmd": "^2.15",
         "phpstan/phpstan-strict-rules": "^1.6",
 
-        "phpro/grumphp-shim": "^2.11",
+        "phpro/grumphp-shim": "^2.12",
         "friendsoftwig/twigcs": "^6.5",
 
         "palantirnet/drupal-rector": "^0.20"
@@ -124,7 +122,7 @@
         "process-timeout": 0,
         "discard-changes": true,
         "optimize-autoloader": true,
-        "preferred-install": "source",
+        "preferred-install": "dist",
         "secure-http": true,
         "sort-packages": true,
         "allow-plugins": {
@@ -226,8 +224,7 @@
         "merge-plugin": {
             "ignore-duplicates": true,
             "include": [
-                "composer.custom.json",
-                "web/modules/contrib/*/composer.libraries.json"
+                "composer.custom.json"
             ],
             "merge-dev": true,
             "merge-extra": true,

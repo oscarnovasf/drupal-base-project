@@ -14,6 +14,9 @@ drush config:import
 drush cache:rebuild
 ```
 
+Admite el parámetro --no-cim que permitiría omitir los comandos 
+`drush config:import`.
+
 ## Funciones de actualización de autoría
 
 A continuación se muestran los 2 tipos de funciones de actualización ejecutadas por este comando, en orden.

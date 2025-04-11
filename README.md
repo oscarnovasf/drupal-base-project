@@ -106,6 +106,16 @@ para su uso con [Lando](https://lando.dev/).
   |**im**|Realiza la importación de la base de datos.|
   |**ex**|Realiza la exportación de la base de datos.|
 
+* ### ./scripts/shell/dev.sh (`lando dev`)
+  Script para cambiar el entorno del proyecto y aplicar las configuraciones
+  apropiadas a cada entorno.
+  Admite cualquiera de estos parámetros (sólo uno y obligatorio):
+
+  |Parámetro|Descripción|
+  |---|---|
+  |**im**|Realiza la importación de la base de datos.|
+  |**ex**|Realiza la exportación de la base de datos.|
+
 * ### ./scripts/shell/initialize.sh (`lando initialize`)
   Se encarga de reiniciar el proyecto eliminando todos los archivos y
   directorios que no están incluidos en el repositorio.

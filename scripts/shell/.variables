@@ -6,25 +6,19 @@
 
 # Módulos de desarrollo
 declare -a DEV_DRUSH_NAMES
-DEV_DRUSH_NAMES=('composer_deploy')
-DEV_DRUSH_NAMES=("${DEV_DRUSH_NAMES[@]}" "config_delete")
+DEV_DRUSH_NAMES=('config_delete')
 DEV_DRUSH_NAMES=("${DEV_DRUSH_NAMES[@]}" "devel")
 DEV_DRUSH_NAMES=("${DEV_DRUSH_NAMES[@]}" "devel_generate")
 DEV_DRUSH_NAMES=("${DEV_DRUSH_NAMES[@]}" "devel_kint_extras")
 DEV_DRUSH_NAMES=("${DEV_DRUSH_NAMES[@]}" "devel_php")
-DEV_DRUSH_NAMES=("${DEV_DRUSH_NAMES[@]}" "twig_vardumper")
-DEV_DRUSH_NAMES=("${DEV_DRUSH_NAMES[@]}" "upgrade_status")
 
 # Módulos de desarrollo (para desinstalar con Drush - script: dev_mode)
 declare -a DEV_DRUSH_NAMES_UNINSTALL
-DEV_DRUSH_NAMES_UNINSTALL=('composer_deploy')
-DEV_DRUSH_NAMES_UNINSTALL=("${DEV_DRUSH_NAMES_UNINSTALL[@]}" "config_delete")
+DEV_DRUSH_NAMES_UNINSTALL=('config_delete')
 DEV_DRUSH_NAMES_UNINSTALL=("${DEV_DRUSH_NAMES_UNINSTALL[@]}" "devel_php")
 DEV_DRUSH_NAMES_UNINSTALL=("${DEV_DRUSH_NAMES_UNINSTALL[@]}" "devel_generate")
 DEV_DRUSH_NAMES_UNINSTALL=("${DEV_DRUSH_NAMES_UNINSTALL[@]}" "devel_kint_extras")
 DEV_DRUSH_NAMES_UNINSTALL=("${DEV_DRUSH_NAMES_UNINSTALL[@]}" "devel")
-DEV_DRUSH_NAMES_UNINSTALL=("${DEV_DRUSH_NAMES_UNINSTALL[@]}" "twig_vardumper")
-DEV_DRUSH_NAMES_UNINSTALL=("${DEV_DRUSH_NAMES_UNINSTALL[@]}" "upgrade_status")
 
 # Módulos de producción/desarrollo
 declare -a PROD_DRUSH_NAMES

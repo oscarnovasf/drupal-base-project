@@ -161,6 +161,8 @@ function finalize() {
 }
 
 # Instala las dependencias del proyecto.
+# Realizo update por culpa de las dependencias de merge-plugin.
+# Se puede añadir el parámetro --no-ansi a composer si se desea.
 function run_composer() {
   echo " "
   linea
@@ -168,13 +170,11 @@ function run_composer() {
   linea
 
   if [ "$SET_PRODUCTION" == "y" ]; then
-    composer install --no-dev
-    # Realizo update por culpa de las dependencias de merge-plugin
-    composer update --no-dev
+    composer install --no-dev --no-cache --no-interaction
+    composer update --no-dev --no-cache --no-interaction
   else
-    composer install
-    # Realizo update por culpa de las dependencias de merge-plugin
-    composer update
+    composer install --no-cache --no-interaction
+    composer update --no-cache --no-interaction
   fi
 }
 

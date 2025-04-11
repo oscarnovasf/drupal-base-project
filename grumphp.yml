@@ -41,16 +41,7 @@ grumphp:
       skip_on_merge_commit: true
 
     phpcs:
-      encoding: utf-8
-      whitelist_patterns:
-        - /^web\/modules\/custom\/(.*)/
-        - /^web\/themes\/custom\/(.*)/
-      ignore_patterns:
-        - .github
-        - .gitlab
-        - bower_components
-        - node_modules
-        - vendor
+      standard: ./phpcs.xml
       triggered_by:
         - php
         - inc
@@ -58,9 +49,6 @@ grumphp:
         - install
         - profile
         - theme
-      report: full
-      report_width: 80
-      show_sniffs_error_path: true
 
     phpmd:
       ruleset: [./phpmd.xml]
