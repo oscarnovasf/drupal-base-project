@@ -113,8 +113,10 @@ para su uso con [Lando](https://lando.dev/).
 
   |Parámetro|Descripción|
   |---|---|
-  |**im**|Realiza la importación de la base de datos.|
-  |**ex**|Realiza la exportación de la base de datos.|
+  |**loc**|Cambia al entorno local importando su configuración específica.|
+  |**dev**|Cambia al entorno de desarrollo importando su configuración específica.|
+  |**stg**|Cambia al entorno de staging importando su configuración específica.|
+  |**pro**|Cambia al entorno de producción importando su configuración específica.|
 
 * ### ./scripts/shell/initialize.sh (`lando initialize`)
   Se encarga de reiniciar el proyecto eliminando todos los archivos y
