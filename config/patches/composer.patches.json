@@ -2,7 +2,7 @@
     "patches": {
 
         "drupal/core": {
-            "Delete translations": "https://www.drupal.org/files/issues/2023-12-02/2503893-59-fix-string-regression.patch"
+            "Delete translations (issues/2503893)": "config/patches/core/fix-string-regression.patch"
         }
 
     }

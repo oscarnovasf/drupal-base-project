@@ -1,0 +1,159 @@
+diff --git a/core/modules/locale/src/Form/TranslateEditForm.php b/core/modules/locale/src/Form/TranslateEditForm.php
+index a377103c27..367ce37281 100644
+--- a/core/modules/locale/src/Form/TranslateEditForm.php
++++ b/core/modules/locale/src/Form/TranslateEditForm.php
+@@ -47,6 +47,7 @@ public function buildForm(array $form, FormStateInterface $form_state) {
+       '#header' => [
+         $this->t('Source string'),
+         $this->t('Translation for @language', ['@language' => $language_name]),
++        $this->t('Delete'),
+       ],
+       '#empty' => $this->t('No strings available.'),
+       '#attributes' => ['class' => ['locale-translate-edit-table']],
+@@ -138,12 +139,30 @@ public function buildForm(array $form, FormStateInterface $form_state) {
+             $form['strings'][$string->lid]['translations'][1]['#title'] = $this->t('Plural form');
+           }
+         }
++        $form['strings'][$string->lid]['delete'] = [
++          '#type' => 'checkbox',
++          '#title' => $this->t('Delete translation'),
++          '#title_display' => 'invisible',
++        ];
+       }
+       if (count(Element::children($form['strings']))) {
+         $form['actions'] = ['#type' => 'actions'];
+         $form['actions']['submit'] = [
+           '#type' => 'submit',
+           '#value' => $this->t('Save translations'),
++          '#button_type' => 'primary',
++        ];
++        $form['actions']['delete'] = [
++          '#type' => 'submit',
++          '#name' => 'delete',
++          '#value' => $this->t('Delete translations'),
++          '#submit' => [[$this, 'submitDelete']],
++          '#button_type' => 'danger',
++          '#states' => [
++            'visible' => [
++              ':input[name$="[delete]"]' => ['checked' => TRUE],
++            ],
++          ],
+         ];
+       }
+     }
+@@ -155,6 +174,9 @@ public function buildForm(array $form, FormStateInterface $form_state) {
+    * {@inheritdoc}
+    */
+   public function validateForm(array &$form, FormStateInterface $form_state) {
++    if ($form_state->getTriggeringElement()['#name'] === 'delete') {
++      return;
++    }
+     $langcode = $form_state->getValue('langcode');
+     foreach ($form_state->getValue('strings') as $lid => $translations) {
+       foreach ($translations['translations'] as $key => $value) {
+@@ -231,7 +253,6 @@ public function submitForm(array &$form, FormStateInterface $form_state) {
+         ['page' => $page]
+       );
+     }
+-
+     if ($updated) {
+       // Clear cache and force refresh of JavaScript translations.
+       _locale_refresh_translations([$langcode], $updated);
+@@ -239,4 +260,21 @@ public function submitForm(array &$form, FormStateInterface $form_state) {
+     }
+   }
+ 
++  public function submitDelete(array $form, FormStateInterface $form_state) {
++    $langcode = $form_state->getValue('langcode');
++    $delete = [];
++    foreach ($form_state->getValue('strings') as $lid => $new_translation) {
++      if ($new_translation['delete']) {
++        $delete[] = $lid;
++      }
++    }
++
++    if ($delete) {
++      $this->localeStorage->deleteStrings(['lid' => $delete]);
++      $this->messenger()->addStatus('Translations were deleted');
++      _locale_refresh_translations([$langcode], $delete);
++      _locale_refresh_configuration([$langcode], $delete);
++    }
++  }
++
+ }
+diff --git a/core/modules/locale/src/StringDatabaseStorage.php b/core/modules/locale/src/StringDatabaseStorage.php
+index 74e94fca5d..87448c620f 100644
+--- a/core/modules/locale/src/StringDatabaseStorage.php
++++ b/core/modules/locale/src/StringDatabaseStorage.php
+@@ -526,7 +526,7 @@ protected function dbStringUpdate($string) {
+   protected function dbDelete($table, $keys) {
+     $query = $this->connection->delete($table, $this->options);
+     foreach ($keys as $field => $value) {
+-      $query->condition($field, $value);
++      $query->condition($field, $value, is_array($value) ? 'IN' : '=');
+     }
+     return $query;
+   }
+diff --git a/core/modules/locale/tests/src/Functional/LocaleTranslationUiTest.php b/core/modules/locale/tests/src/Functional/LocaleTranslationUiTest.php
+index ced6504a4a..8492f9a87e 100644
+--- a/core/modules/locale/tests/src/Functional/LocaleTranslationUiTest.php
++++ b/core/modules/locale/tests/src/Functional/LocaleTranslationUiTest.php
+@@ -244,6 +244,58 @@ public function testStringTranslation() {
+     $this->assertSession()->pageTextNotContains('No strings available.');
+   }
+ 
++  /**
++   * Tests string delete feature on translation form.
++   */
++  public function testLocaleStringDelete() {
++    $user = $this->drupalCreateUser([
++      'translate interface',
++      'administer languages',
++      'access administration pages',
++    ]);
++    $this->drupalLogin($user);
++    ConfigurableLanguage::createFromLangcode('fr')->save();
++
++    // Create test source string.
++    $string = $this->container->get('locale.storage')->createString([
++      'source' => $this->randomMachineName(100),
++      'context' => $this->randomMachineName(20),
++    ])->save();
++
++    // Reset locale cache.
++    $this->container->get('string_translation')->reset();
++
++    // Ensure non-customized translation string does appear if searching
++    // non-customized translation.
++    $this->drupalGet('admin/config/regional/translate');
++    $search = [
++      'string' => $string->getString(),
++    ];
++    $this->submitForm($search, 'Filter');
++
++    // Submit the translations without changing the translation.
++    $this->drupalGet('admin/config/regional/translate');
++    $textarea = $this->assertSession()->elementExists('xpath', '//textarea');
++    $lid = $textarea->getAttribute('name');
++
++    // Ensure that delete checkbox exists.
++    $this->assertSession()->fieldExists("strings[$string->lid][delete]");
++
++    // Submit the form to delete the checkbox.
++    $edit = [
++      $lid => $string->getString(),
++      "strings[$string->lid][delete]" => 1,
++    ];
++    $this->submitForm($edit, 'Delete translations');
++
++    $this->drupalGet('admin/config/regional/translate');
++    $search = [
++      'string' => $string->getString(),
++    ];
++    $this->submitForm($search, 'Filter');
++    $this->assertSession()->responseContains('No strings available.');
++  }
++
+   /**
+    * Tests the rebuilding of JavaScript translation files on deletion.
+    */
