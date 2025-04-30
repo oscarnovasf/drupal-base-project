@@ -70,11 +70,3 @@ grumphp:
       triggered_by: [php, module, theme, inc, install]
       memory_limit: '-1'
       use_grumphp_paths: false
-
-    twigcs:
-      path: .
-      severity: error
-      display: blocking
-      ruleset: FriendsOfTwig\Twigcs\Ruleset\Official
-      triggered_by: [twig]
-      exclude: ['#web/core#', '#web/modules/contrib#', '#web/themes/contrib#', '#web/libraries#', '#vendor#']
