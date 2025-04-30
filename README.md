@@ -10,36 +10,39 @@ Plantilla para [Composer](https://getcomposer.org/) de instalación de Drupal.
 
 ## Requerimientos
 
-* ### Herramientas para desarrollo en máquina Local.
-  * El proyecto está pensado para usar [Lando](https://lando.dev/) como entorno
+- ### Herramientas para desarrollo en máquina Local.
+  - El proyecto está pensado para usar [Lando](https://lando.dev/) como entorno
     de desarrollo local.
-  * Si se quiere poder enviar una url de nuestro proyecto en local con [Lando](https://lando.dev/),
+  - Si se quiere poder enviar una url de nuestro proyecto en local con [Lando](https://lando.dev/),
     es necesario instalar y configurar [NGROK](https://ngrok.com/).
 
-* ### Herramientas para servidores (dev, stg o pro)
-  * Es necesario tener instalada la herramienta [JQ](https://stedolan.github.io/jq/)
+- ### Herramientas para servidores (dev, stg o pro)
+  - Es necesario tener instalada la herramienta [JQ](https://stedolan.github.io/jq/)
     para la línea de comandos.
-  * Es necesario tener instalada la herramienta [PV](http://www.ivarch.com/programs/pv.shtml)
+  - Es necesario tener instalada la herramienta [PV](http://www.ivarch.com/programs/pv.shtml)
     para la línea de comandos.
 
-* ### Otros Requerimientos
-  * El proyecto está pensado para hacer uso de *Redis* / *KeyDB*, por lo que
+- ### Otros Requerimientos
+  - El proyecto está pensado para hacer uso de *Redis* / *KeyDB*, por lo que
     será necesario tener acceso a una de estas herramientas.
     Si no se desea usar, se puede desactivar en el archivo de variables de
     entorno.
-  * Según la naturaleza del proyecto final, es posible que sean necesarias otras
+  - Según la naturaleza del proyecto final, es posible que sean necesarias otras
     herramientas adicionales.
+
+## Recomendaciones
+- Se recomienda usar [git flow](https://danielkummer.github.io/git-flow-cheatsheet/)
 
 ## Instalación
 
-* ### Proceso de instalación: [LANDO](https://lando.dev/)
-  * Copiamos el contenido del proyecto en una carpeta de nuestra máquina[^1].
-  * Establecemos los valores correctos en el archivo `.lando.yml` para la
+- ### Proceso de instalación: [LANDO](https://lando.dev/)
+  - Copiamos el contenido del proyecto en una carpeta de nuestra máquina[^1].
+  - Establecemos los valores correctos en el archivo `.lando.yml` para la
     conexión con la base de datos y el nombre del proyecto.
-  * Creamos el archivo `.env` a partir de `.env.example` y establecemos los
+  - Creamos el archivo `.env` a partir de `.env.example` y establecemos los
     valores a las variables.
-  * Establecemos el nombre del proyecto en nuestro `composer.custom.json`.
-  * Ejecutamos `lando start` para montar los contenedores del proyecto.
+  - Establecemos el nombre del proyecto en nuestro `composer.custom.json`.
+  - Ejecutamos `lando start` para montar los contenedores del proyecto.
 
 > [!CAUTION]
 > Este proyecto incluye un script que se ejecuta como hook de Lando al
@@ -47,7 +50,7 @@ Plantilla para [Composer](https://getcomposer.org/) de instalación de Drupal.
 > desarrollo de esta plantilla y quizás quieras eliminarlo para prevenir
 > errores en tu proyecto (`./.lando/scripts/destroy_lando.sh`).
 
-* ### Usuarios por defecto:
+- ### Usuarios por defecto:
 
   Este script genera dos usuarios, el "administrador" y un usuario "gestor":
 
@@ -62,7 +65,7 @@ Este proyecto define dos comandos personalizados para ejecutarse con Drush.
 Se trata de una serie de comandos que facilitan la ejecución secuencial de otros
 comandos aglutinando su ejecución en un sólo comando.
 
-* ### custom:pre-commit
+- ### custom:pre-commit
 
   El comando estandariza el procedimiento a seguir en Drupal tras ejecutar
   composer para actualizar módulos, unificando la ejecución de los siguientes
@@ -76,7 +79,7 @@ comandos aglutinando su ejecución en un sólo comando.
   drush cache:rebuild
   ```
 
-* ### custom:deploy
+- ### custom:deploy
 
   El comando estandariza el funcionamiento de los despliegues de Drupal,
   unificando la ejecución de los siguientes comandos en uno solo:
@@ -97,7 +100,7 @@ comandos aglutinando su ejecución en un sólo comando.
 Este proyecto incluye una serie de scripts y su respectivo comando específico
 para su uso con [Lando](https://lando.dev/).
 
-* ### ./scripts/shell/db.sh (`lando db`)
+- ### ./scripts/shell/db.sh (`lando db`)
   Script para importar/exportar el contenido de la base de datos.
   Admite cualquiera de estos parámetros (sólo uno y obligatorio):
 
@@ -106,7 +109,7 @@ para su uso con [Lando](https://lando.dev/).
   |**im**|Realiza la importación de la base de datos.|
   |**ex**|Realiza la exportación de la base de datos.|
 
-* ### ./scripts/shell/dev.sh (`lando dev`)
+- ### ./scripts/shell/dev.sh (`lando dev`)
   Script para cambiar el entorno del proyecto y aplicar las configuraciones
   apropiadas a cada entorno.
   Admite cualquiera de estos parámetros (sólo uno y obligatorio):
@@ -118,7 +121,7 @@ para su uso con [Lando](https://lando.dev/).
   |**stg**|Cambia al entorno de staging importando su configuración específica.|
   |**pro**|Cambia al entorno de producción importando su configuración específica.|
 
-* ### ./scripts/shell/initialize.sh (`lando initialize`)
+- ### ./scripts/shell/initialize.sh (`lando initialize`)
   Se encarga de reiniciar el proyecto eliminando todos los archivos y
   directorios que no están incluidos en el repositorio.
 
@@ -127,7 +130,7 @@ para su uso con [Lando](https://lando.dev/).
   |**-y \| --yes**|Realiza la limpieza, si no se especifica sólo muestra los archivos que podrán ser eliminados.|
   |**-h \| --help**|Muestra la ayuda.|
 
-* ### ./scripts/shell/trans.sh (`lando trans`)
+- ### ./scripts/shell/trans.sh (`lando trans`)
   Script para importar/exportar las traducciones (excepto el inglés).
   Admite cualquiera de estos parámetros (sólo uno y obligatorio):
 
@@ -139,14 +142,17 @@ para su uso con [Lando](https://lando.dev/).
 
 ## Otros scripts
 
-* ### ./scripts/shell/share.sh
-  > Script para generar un túnel y poder compartir nuestro proyecto local
-  > fuera de nuestra red.
+- ### ./scripts/shell/share.sh
+  Script para generar un túnel y poder compartir nuestro proyecto local
+  fuera de nuestra red.
 
   Este script hace uso de [ngrok](https://ngrok.com/) por lo que será necesario
   crearse una cuenta y configurar el API Key en nuestro entorno local.
   Al ejecutarse se genera una url que podemos utilizar desde una máquina
   externa para conectarnos a nuestro sistema.
+
+  Uno de los usos básicos de este script es para poder gestionar localmente los
+  callbacks de algunas funcionalidades con proveedores externos (ej. banca).
 
   > El script usa Lando para obtener la url pero no se puede ejecutar dentro
   > de Lando, por lo que no está disponible ningún atajo al comando.
