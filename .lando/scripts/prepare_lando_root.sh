@@ -188,6 +188,22 @@ function install_oci8_mac() {
   docker-php-ext-enable oci8
 }
 
+# Instalación de bromas/chistes.
+function install_jokes() {
+  echo " "
+  echo -e " Instalando ${YELLOW}bromas/chistes${RESET}..."
+  linea
+
+  apt-get update -y && apt-get install -y \
+    sysvbanner \
+    figlet \
+    cowsay \
+    fortune \
+    fortunes \
+    fortunes-es \
+    fortunes-es-off
+}
+
 
 ################################################################################
 # CUERPO PRINCIPAL DEL SCRIPT.
@@ -201,7 +217,7 @@ install_jq
 install_pv
 install_cloc
 
-# Herramientas de desarrollo
+# Herramientas de desarrollo.
 install_node 20
 install_gulp
 install_sass
@@ -209,5 +225,8 @@ install_sass
 # Herramientas de conexión con BBDD.
 # install_oci8_ubuntu
 # install_oci8_mac
+
+# Un poco de humor.
+install_jokes
 
 show_bye

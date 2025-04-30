@@ -80,7 +80,7 @@ function check_installed() {
     linea
     echo -e " ${RED}El sistema ya está instalado, no se puede ejecutar este script.${RESET}"
     linea
-    exit 2
+    exit 0
   fi
 }
 

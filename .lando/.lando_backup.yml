@@ -33,6 +33,10 @@ services:
       retry: 10
     overrides:
       environment:
+        # Ajustes del entorno.
+        PATH: "/usr/local/games:/usr/games:$PATH"
+        LANG: "C.UTF-8"
+        LC_ALL: "C.UTF-8"
         # Soporte para debug con Drush y XDEBUG.
         PHP_IDE_CONFIG: "serverName=appserver"
         # PHPUnit.
@@ -108,6 +112,8 @@ proxy:
 events:
   pre-destroy:
     - ./.lando/scripts/destroy_lando.sh
+  post-start:
+    - fortune /usr/share/games/fortunes/es/varios.fortunes | cowsay -f stimpy
 
 tooling:
 
