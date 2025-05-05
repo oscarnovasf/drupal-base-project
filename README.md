@@ -6,7 +6,16 @@ Plantilla para [Composer](https://getcomposer.org/) de instalación de Drupal.
 [![version][version-badge]][changelog] [![Licencia][license-badge]][license] [![Código de conducta][conduct-badge]][conduct]
 [![wakatime](https://wakatime.com/badge/user/236d57da-61e8-46f2-980b-7af630b18f42/project/f988ef5a-1e85-4d32-9121-75c552c747ec.svg)](https://wakatime.com/badge/user/236d57da-61e8-46f2-980b-7af630b18f42/project/f988ef5a-1e85-4d32-9121-75c552c747ec)
 
-<img src="https://img.shields.io/liberapay/patrons/ONovasDev.svg?logo=liberapay">
+[![Donate][donate-badge]][donate-url] <img src="https://img.shields.io/liberapay/patrons/ONovasDev.svg?logo=liberapay">
+
+# Tabla de Contenidos
+1. [Requerimientos](#requerimientos)
+2. [Recomendaciones](#recomendaciones)
+3. [Instalación](#instalación)
+4. [Comandos personalizados para Drush](#comandos-personalizados-para-drush)
+5. [Scripts](#scripts)
+6. [Otros scripts](#otros-scripts)
+7. [FAQs](#faqs)
 
 ## Requerimientos
 
@@ -154,8 +163,63 @@ para su uso con [Lando](https://lando.dev/).
   Uno de los usos básicos de este script es para poder gestionar localmente los
   callbacks de algunas funcionalidades con proveedores externos (ej. banca).
 
+  > [!NOTE]
   > El script usa Lando para obtener la url pero no se puede ejecutar dentro
-  > de Lando, por lo que no está disponible ningún atajo al comando.
+  > de Lando, por lo que no está disponible ningún atajo al comando y debe
+  > ejecutarse con la ruta completa.
+
+## FAQs
+
+* ### ¿Cómo especificar una versión concreta de PHP?
+
+  En este proyecto se usa la versión de PHP 8.3 como mínimo
+  (ver [System Requirements](https://www.drupal.org/docs/getting-started/system-requirements/overview)),
+  pero es posible que al usar `composer update` se actualicen algunos paquetes
+  con un requerimiento superior.
+
+  Para evitar esto puedes indicar en la sección `config` del `composer.json` la
+  versión que quieres usar:
+
+  ```json
+  "config": {
+      "platform": {
+          "php": "8.3.0"
+      }
+  },
+  ```
+
+* ### ¿Cómo proteger archivos para no ser sobrescritos?
+
+  En algún proyecto nos puede interesar no sobrescribir archivos como el
+  *.htaccess* o el *robots.txt*. Para eso bastará con añadir lo siguiente al
+  archivo `composer.json`:
+
+  ```json
+  "file-mapping": {
+      ...
+      "[web-root]/robots.txt": false,
+      "[web-root]/.htaccess": false,
+      "[web-root]/.ht.router.php": false
+  },
+  ```
+
+* ### ¿Cómo aplicar un parche al proyecto?
+
+  La gestión de parches para el sistema está alojada en la carpeta:
+  `./config/patches/` en el archivo *composer.patches.json*.
+
+  Se recomienda que, siempre que sea posible, se descarguen los parches que
+  serán aplicados dentro de su propia carpeta.
+
+  Por ejemplo, para un parche del core de drupal se generará la siguiente
+  estructura:
+
+  ```yml
+  - config
+    - patches
+      - core
+        - archivo.patch
+  ```
 
 
 [^1]: De forma opcional podemos usar el script [iniciar-proyecto](https://github.com/oscarnovasf/iniciar-proyecto) para descargar e iniciar un proyecto nuevo.
@@ -172,3 +236,6 @@ para su uso con [Lando](https://lando.dev/).
 [conduct-badge]: https://img.shields.io/badge/C%C3%B3digo%20de%20Conducta-2.0-4baaaa.svg "Código de conducta"
 
 [changelog]: CHANGELOG.md "Histórico de cambios"
+
+[donate-badge]: https://img.shields.io/badge/Donaci%C3%B3n-PayPal-red.svg
+[donate-url]: https://paypal.me/oscarnovasf "Haz una donación"
