@@ -163,10 +163,10 @@ para su uso con [Lando](https://lando.dev/).
   Uno de los usos básicos de este script es para poder gestionar localmente los
   callbacks de algunas funcionalidades con proveedores externos (ej. banca).
 
-  > [!NOTE]
-  > El script usa Lando para obtener la url pero no se puede ejecutar dentro
-  > de Lando, por lo que no está disponible ningún atajo al comando y debe
-  > ejecutarse con la ruta completa.
+> [!NOTE]
+> El script usa Lando para obtener la url pero no se puede ejecutar dentro
+> de Lando, por lo que no está disponible ningún atajo al comando y debe
+> ejecutarse con la ruta completa.
 
 ## FAQs
 
