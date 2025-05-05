@@ -1,3 +1,4 @@
+GNU v3
 ## LICENCIA PÚBLICA GENERAL DE GNU
 ##### Versión 3, 29 de junio de 2007
 ---
